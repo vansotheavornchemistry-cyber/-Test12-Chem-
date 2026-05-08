@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>តេស្តគីមីវិទ្យាម្ដងមួយសំណួរ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&family=Moul&display=swap');
+
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-card {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Moul', serif;
+            font-size: 20px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .progress {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: right;
+        }
+
+        .question-box {
+            min-height: 200px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .options label {
+            display: block;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .options label:hover {
+            background-color: #f8f9fa;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .options label.selected {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Kantumruy Pro';
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-next { background-color: #3498db; color: white; }
+        .btn-prev { background-color: #95a5a6; color: white; }
+        .btn-submit { background-color: #27ae60; color: white; }
+        
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #27ae60;
+            color: white;
+            line-height: 120px;
+            font-size: 30px;
+            margin: 20px auto;
+            font-weight: bold;
+        }
+
+        .detail-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-card" id="quiz-container">
+    <h1>វិញ្ញាសាគីមីវិទ្យា ថ្នាក់ទី១២</h1>
+    
+    <div id="quiz-screen">
+        <div class="progress" id="progress-text">សំណួរទី 1 នៃ 10</div>
+        
+        <div class="question-box">
+            <div class="question-text" id="q-text">តើ pH របស់សូលុយស្យុងអាស៊ីតខ្លាំងដែលមានកំហាប់ 0.01M ស្មើនឹងប៉ុន្មាន?</div>
+            <div class="options" id="options-container">
+                <!-- ជម្រើសនឹងបង្ហាញនៅទីនេះតាមរយៈ JS -->
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn-prev" id="btn-prev" onclick="changeQuestion(-1)" disabled>ថយក្រោយ</button>
+            <button class="btn-next" id="btn-next" onclick="changeQuestion(1)">បន្ទាប់ / រំលង</button>
+        </div>
+    </div>
+
+    <div id="result-screen">
+        <h2>លទ្ធផលរបស់អ្នក</h2>
+        <div class="score-circle" id="final-score">0</div>
+        <div class="detail-info" id="final-stats"></div>
+        <button class="btn-next" style="margin-top: 20px;" onclick="location.reload()">ធ្វើតេស្តឡើងវិញ</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "១. តើ pH របស់សូលុយស្យុងអាស៊ីតខ្លាំងដែលមានកំហាប់ 0.01M ស្មើនឹងប៉ុន្មាន?", options: ["1", "2", "3", "7"], correct: 1 },
+        { q: "២. តើប្រតិកម្មរវាងអាស៊ីតខ្លាញ់ និងគ្លីសេរ៉ុល បង្កើតបានជាអ្វី?", options: ["អាល់កុល", "អេស្ទែ", "អាល់ដេអ៊ីត", "សាប៊ូ"], correct: 1 },
+        { q: "៣. តើកាតាលីករមានតួនាទីអ្វីក្នុងប្រតិកម្មគីមី?", options: ["បន្ថយល្បឿន", "បង្កើនល្បឿន", "មិនធ្វើអ្វីសោះ", "ប្តូរតុល្យភាព"], correct: 1 },
+        { q: "៤. រូបមន្តទូទៅរបស់អាស៊ីតកាបុកស៊ីលីកគឺ៖", options: ["R-OH", "R-CHO", "R-COOH", "R-NH2"], correct: 2 },
+        { q: "៥. ប្រតិកម្មសាប៊ូកម្ម (Saponification) គឺជាប្រតិកម្មរវាងអេស្ទែជាមួយអ្វី?", options: ["ទឹក", "អាស៊ីត", "បាសខ្លាំង", "អាល់កុល"], correct: 2 },
+        { q: "៦. ក្នុងសមីការ CnH2n+2 តើវាជារូបមន្តទូទៅរបស់អ្វី?", options: ["អាល់សែន", "អាល់ស៊ីន", "អាល់កាន", "អាល់កុល"], correct: 2 },
+        { q: "៧. តើ pH របស់ទឹកសុទ្ធនៅសីតុណ្ហភាព 25°C ស្មើនឹងប៉ុន្មាន?", options: ["0", "14", "7", "1"], correct: 2 },
+        { q: "៨. សូលុយស្យុងមួយមាន [H3O+] = 10^-5 M តើ pH ស្មើនឹងប៉ុន្មាន?", options: ["3", "5", "9", "14"], correct: 1 },
+        { q: "៩. តើបាសឆ្លាស់របស់អាស៊ីត HCl គឺអ្វី?", options: ["H2O", "Cl-", "OH-", "H3O+"], correct: 1 },
+        { q: "១០. តើម៉ាសម៉ូលរបស់ NaOH ស្មើនឹងប៉ុន្មាន? (Na=23, O=16, H=1)", options: ["20 g/mol", "30 g/mol", "40 g/mol", "58 g/mol"], correct: 2 }
+    ];
+
+    let currentIdx = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+
+    function displayQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('progress-text').innerText = `សំណួរទី ${currentIdx + 1} នៃ ${questions.length}`;
+        document.getElementById('q-text').innerText = q.q;
+        
+        const optionsHtml = q.options.map((opt, i) => `
+            <label class="${userAnswers[currentIdx] === i ? 'selected' : ''}">
+                <input type="radio" name="answer" value="${i}" ${userAnswers[currentIdx] === i ? 'checked' : ''} onchange="saveAnswer(${i})">
+                ${opt}
+            </label>
+        `).join('');
+        
+        document.getElementById('options-container').innerHTML = optionsHtml;
+
+        // ប៊ូតុងបញ្ជា
+        document.getElementById('btn-prev').disabled = currentIdx === 0;
+        if (currentIdx === questions.length - 1) {
+            document.getElementById('btn-next').innerText = "មើលលទ្ធផល";
+            document.getElementById('btn-next').className = "btn-submit";
+        } else {
+            document.getElementById('btn-next').innerText = "បន្ទាប់ / រំលង";
+            document.getElementById('btn-next').className = "btn-next";
+        }
+    }
+
+    function saveAnswer(index) {
+        userAnswers[currentIdx] = index;
+        displayQuestion(); // Refresh style
+    }
+
+    function changeQuestion(step) {
+        if (step === 1 && currentIdx === questions.length - 1) {
+            showResult();
+            return;
+        }
+        currentIdx += step;
+        displayQuestion();
+    }
+
+    function showResult() {
+        let totalScore = 0;
+        let correct = 0;
+        let wrong = 0;
+        let skipped = 0;
+
+        userAnswers.forEach((ans, i) => {
+            if (ans === null) {
+                skipped++;
+            } else if (ans === questions[i].correct) {
+                totalScore += 10;
+                correct++;
+            } else {
+                totalScore -= 5;
+                wrong++;
+            }
+        });
+
+        // បង្ហាញអេក្រង់លទ្ធផល
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('final-score').innerText = totalScore;
+        
+        document.getElementById('final-stats').innerHTML = `
+            <p>✅ ឆ្លើយត្រូវ: ${correct} សំណួរ (+${correct * 10} ពិន្ទុ)</p>
+            <p>❌ ឆ្លើយខុស: ${wrong} សំណួរ (-${wrong * 5} ពិន្ទុ)</p>
+            <p>⚪ រំលង: ${skipped} សំណួរ (0 ពិន្ទុ)</p>
+            <hr>
+            <p><strong>ពិន្ទុសរុប: ${totalScore} / 100</strong></p>
+        `;
+    }
+
+    // ចាប់ផ្ដើមដំបូង
+    displayQuestion();
+</script>
+
+</body>
+</html>
