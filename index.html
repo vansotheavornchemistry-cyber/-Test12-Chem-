@@ -3,253 +3,773 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>តេស្តគីមីវិទ្យាម្ដងមួយសំណួរ</title>
+    <title>កម្មវិធីកត់ត្រាសិស្សបង់ប្រាក់</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kantumruy Pro', 'Hanuman', 'sans-serif'],
+                    },
+                    colors: {
+                        bgGradientStart: '#eef2ff',
+                        bgGradientEnd: '#f5f3ff',
+                        cardBg: '#ffffff',
+                        primaryBlue: '#4f46e5',
+                        primaryPurple: '#7c3aed',
+                        accentGreen: '#10b981',
+                        accentRed: '#ef4444',
+                        textDark: '#1e293b',
+                        textGray: '#64748b',
+                        borderLight: '#e2e8f0',
+                        inputBg: '#f8fafc',
+                        tagBlueBg: '#e0e7ff',
+                        tagBlueText: '#4f46e5',
+                        tagPinkBg: '#fce7f3',
+                        tagPinkText: '#db2777'
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)'
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&family=Moul&display=swap');
-
         body {
-            font-family: 'Kantumruy Pro', sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
             min-height: 100vh;
-            margin: 0;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px -10px rgba(79, 70, 229, 0.1);
         }
 
-        .quiz-card {
-            background: white;
-            width: 90%;
-            max-width: 600px;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+            color: #1e293b;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .course-checkbox:checked + div {
+            border-color: #7c3aed;
+            background-color: #f5f3ff;
+        }
+
+        .gradient-top-border {
             position: relative;
         }
-
-        h1 {
-            font-family: 'Moul', serif;
-            font-size: 20px;
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .progress {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-            text-align: right;
-        }
-
-        .question-box {
-            min-height: 200px;
-        }
-
-        .question-text {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #34495e;
-        }
-
-        .options label {
-            display: block;
-            padding: 12px 15px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .options label:hover {
-            background-color: #f8f9fa;
-        }
-
-        .options input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
-
-        .options label.selected {
-            background-color: #e3f2fd;
-            border-color: #2196f3;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        button {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Kantumruy Pro';
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn-next { background-color: #3498db; color: white; }
-        .btn-prev { background-color: #95a5a6; color: white; }
-        .btn-submit { background-color: #27ae60; color: white; }
         
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        .gradient-top-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed, #ec4899);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
         }
 
-        #result-screen {
-            display: none;
-            text-align: center;
+        /* Custom Checkbox */
+        .custom-checkbox {
+            appearance: none;
+            background-color: #fff;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.25em;
+            height: 1.25em;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.25em;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
         }
 
-        .score-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #27ae60;
-            color: white;
-            line-height: 120px;
-            font-size: 30px;
-            margin: 20px auto;
-            font-weight: bold;
+        .custom-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em white;
+            background-color: transform;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
         }
 
-        .detail-info {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: left;
+        .custom-checkbox:checked {
+            background-color: #7c3aed;
+            border-color: #7c3aed;
+        }
+
+        .custom-checkbox:checked::before {
+            transform: scale(1);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
         }
     </style>
 </head>
-<body>
+<body class="text-textDark font-sans pb-12 antialiased">
 
-<div class="quiz-card" id="quiz-container">
-    <h1>វិញ្ញាសាគីមីវិទ្យា ថ្នាក់ទី១២</h1>
-    
-    <div id="quiz-screen">
-        <div class="progress" id="progress-text">សំណួរទី 1 នៃ 10</div>
+    <div class="max-w-md mx-auto pt-8 px-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
         
-        <div class="question-box">
-            <div class="question-text" id="q-text">តើ pH របស់សូលុយស្យុងអាស៊ីតខ្លាំងដែលមានកំហាប់ 0.01M ស្មើនឹងប៉ុន្មាន?</div>
-            <div class="options" id="options-container">
-                <!-- ជម្រើសនឹងបង្ហាញនៅទីនេះតាមរយៈ JS -->
+        <header class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-textDark mb-2">
+                ងាយស្រួលកត់ត្រា និងរក្សាទុកទិន្នន័យសិស្ស<br>ប្រកបដោយសុវត្ថិភាព
+            </h1>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <div class="lg:col-span-5">
+                <div class="glass-card gradient-top-border p-6 shadow-soft relative">
+                    
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-blue-100 text-primaryBlue p-2 rounded-lg">
+                            <i class="fa-solid fa-user-plus text-xl"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-textDark">បញ្ចូលព័ត៌មានសិស្សថ្មី</h2>
+                    </div>
+                    
+                    <form id="studentForm" class="space-y-5">
+                        
+                        <!-- Name Input -->
+                        <div>
+                            <label for="studentName" class="block text-sm font-semibold text-textDark mb-1.5">
+                                ឈ្មោះសិស្សពេញ <span class="text-accentRed">*</span>
+                            </label>
+                            <input type="text" id="studentName" required
+                                class="input-field"
+                                placeholder="ឧ. សុខ សាន្ត">
+                        </div>
+
+                        <!-- Gender and Date Row -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="gender" class="block text-sm font-semibold text-textDark mb-1.5">
+                                    ភេទ
+                                </label>
+                                <div class="relative">
+                                    <select id="gender" class="input-field appearance-none cursor-pointer pr-10">
+                                        <option value="ប្រុស">ប្រុស</option>
+                                        <option value="ស្រី">ស្រី</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="regDate" class="block text-sm font-semibold text-textDark mb-1.5">
+                                    ថ្ងៃខែចុះឈ្មោះ <span class="text-accentRed">*</span>
+                                </label>
+                                <input type="date" id="regDate" required class="input-field cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Courses Selection -->
+                        <div class="bg-inputBg p-4 rounded-xl border border-borderLight">
+                            <label class="block text-sm font-semibold text-textDark mb-3">
+                                ថ្នាក់រៀន / វគ្គ និងតម្លៃ <span class="text-accentRed">*</span>
+                            </label>
+                            
+                            <div class="space-y-3" id="courseSelectionContainer">
+                                <!-- Math Course -->
+                                <label class="flex items-center gap-3 p-3 bg-white border border-borderLight rounded-xl cursor-pointer hover:border-primaryPurple transition-colors group">
+                                    <input type="checkbox" class="custom-checkbox course-checkbox" value="គណិតវិទ្យា" data-course-id="math">
+                                    <span class="font-medium flex-1 group-hover:text-primaryPurple transition-colors">គណិតវិទ្យា</span>
+                                    <div class="flex items-center gap-1 w-24">
+                                        <span class="text-primaryPurple font-semibold">$</span>
+                                        <input type="number" id="price_math" min="0" step="0.01" class="w-full text-sm py-1 px-2 border border-borderLight rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-primaryPurple focus:ring-1 focus:ring-primaryPurple disabled:opacity-50 disabled:bg-gray-100" placeholder="តម្លៃ" disabled>
+                                    </div>
+                                </label>
+
+                                <!-- Chemistry Course -->
+                                <label class="flex items-center gap-3 p-3 bg-white border border-borderLight rounded-xl cursor-pointer hover:border-primaryPurple transition-colors group">
+                                    <input type="checkbox" class="custom-checkbox course-checkbox" value="គីមីវិទ្យា" data-course-id="chem">
+                                    <span class="font-medium flex-1 group-hover:text-primaryPurple transition-colors">គីមីវិទ្យា</span>
+                                    <div class="flex items-center gap-1 w-24">
+                                        <span class="text-primaryPurple font-semibold">$</span>
+                                        <input type="number" id="price_chem" min="0" step="0.01" class="w-full text-sm py-1 px-2 border border-borderLight rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-primaryPurple focus:ring-1 focus:ring-primaryPurple disabled:opacity-50 disabled:bg-gray-100" placeholder="តម្លៃ" disabled>
+                                    </div>
+                                </label>
+
+                                <!-- Biology Course -->
+                                <label class="flex items-center gap-3 p-3 bg-white border border-borderLight rounded-xl cursor-pointer hover:border-primaryPurple transition-colors group">
+                                    <input type="checkbox" class="custom-checkbox course-checkbox" value="ជីវៈវិទ្យា" data-course-id="bio">
+                                    <span class="font-medium flex-1 group-hover:text-primaryPurple transition-colors">ជីវៈវិទ្យា</span>
+                                    <div class="flex items-center gap-1 w-24">
+                                        <span class="text-primaryPurple font-semibold">$</span>
+                                        <input type="number" id="price_bio" min="0" step="0.01" class="w-full text-sm py-1 px-2 border border-borderLight rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-primaryPurple focus:ring-1 focus:ring-primaryPurple disabled:opacity-50 disabled:bg-gray-100" placeholder="តម្លៃ" disabled>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Total Price Input -->
+                        <div>
+                            <label for="totalAmount" class="block text-sm font-semibold text-textDark mb-1.5">
+                                តម្លៃបង់សរុប ($) <span class="text-accentRed">*</span>
+                            </label>
+                            <input type="number" id="totalAmount" required min="0" step="0.01"
+                                class="input-field font-bold text-lg text-primaryPurple bg-purple-50"
+                                placeholder="0.00" readonly>
+                        </div>
+                        
+                        <div id="formError" class="text-accentRed text-sm hidden font-medium">
+                            <i class="fa-solid fa-circle-exclamation mr-1"></i> <span id="formErrorMessage"></span>
+                        </div>
+
+                        <div class="flex gap-3 mt-4">
+                            <button type="button" id="cancelEditBtn" onclick="resetForm()"
+                                class="hidden w-1/3 bg-gray-100 hover:bg-gray-200 text-textGray font-bold py-3.5 px-4 rounded-xl transition-all duration-300">
+                                បោះបង់
+                            </button>
+                            <button type="submit" id="submitBtn"
+                                class="w-full flex-1 bg-primaryBlue hover:bg-primaryPurple text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-200 flex justify-center items-center gap-2 transform active:scale-[0.98]">
+                                <i id="submitBtnIcon" class="fa-solid fa-floppy-disk"></i>
+                                <span id="submitBtnText">រក្សាទុកព័ត៌មាន</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="glass-card p-6 shadow-soft">
+                    
+                    <!-- Header of List Section -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-purple-100 text-primaryPurple p-2 rounded-lg">
+                                <i class="fa-solid fa-file-lines text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-textDark">បញ្ជីសិស្សបានចុះឈ្មោះ</h2>
+                        </div>
+                        
+                        <button id="clearAllBtn" class="text-accentRed hover:bg-red-50 p-2 rounded-lg transition-colors border border-red-100" title="លុបទិន្នន័យទាំងអស់">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                    <!-- Global Summary Badges -->
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <div class="bg-accentGreen text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                            ចំណូលសរុប៖ <span id="globalTotalRevenue" class="font-bold">$ 0.00</span>
+                        </div>
+                        <div class="bg-primaryBlue text-white px-4 py-2 rounded-xl font-medium flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-users"></i>
+                            សរុប៖ <span id="globalTotalStudents" class="font-bold">0 នាក់</span>
+                        </div>
+                    </div>
+
+                    <!-- Containers for each course list -->
+                    <div id="courseListsContainer" class="space-y-6">
+                        <!-- Dynamic content will be generated here by JS -->
+                    </div>
+                    
+                    <div id="emptyListState" class="text-center py-10 hidden">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 text-gray-400 mb-4">
+                            <i class="fa-solid fa-folder-open text-2xl"></i>
+                        </div>
+                        <p class="text-textGray font-medium">មិនទាន់មានទិន្នន័យសិស្សនៅឡើយទេ</p>
+                    </div>
+
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="navigation">
-            <button class="btn-prev" id="btn-prev" onclick="changeQuestion(-1)" disabled>ថយក្រោយ</button>
-            <button class="btn-next" id="btn-next" onclick="changeQuestion(1)">បន្ទាប់ / រំលង</button>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4 transform scale-95 transition-transform duration-300 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-accentRed"></div>
+            <div class="flex items-center gap-4 mb-4 mt-2">
+                <div class="bg-red-100 text-accentRed p-3 rounded-full">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-textDark">បញ្ជាក់ការលុប</h3>
+            </div>
+            <p class="text-textGray mb-6 font-medium" id="deleteModalMsg">តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?</p>
+            <div class="flex justify-end gap-3">
+                <button id="cancelDeleteBtn" class="px-5 py-2.5 text-textGray font-medium bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">បោះបង់</button>
+                <button id="confirmDeleteBtn" class="px-5 py-2.5 text-white font-medium bg-accentRed hover:bg-red-600 rounded-xl transition-colors shadow-md shadow-red-200">លុប</button>
+            </div>
         </div>
     </div>
 
-    <div id="result-screen">
-        <h2>លទ្ធផលរបស់អ្នក</h2>
-        <div class="score-circle" id="final-score">0</div>
-        <div class="detail-info" id="final-stats"></div>
-        <button class="btn-next" style="margin-top: 20px;" onclick="location.reload()">ធ្វើតេស្តឡើងវិញ</button>
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 -translate-y-full opacity-0 bg-white border border-borderLight shadow-lg rounded-full px-6 py-3 transition-all duration-300 z-50 flex items-center gap-3">
+        <div id="toastIconContainer" class="rounded-full p-1 bg-green-100 text-accentGreen">
+            <i id="toastIcon" class="fa-solid fa-check text-sm"></i>
+        </div>
+        <span id="toastMessage" class="font-bold text-textDark text-sm">ជោគជ័យ!</span>
     </div>
-</div>
 
-<script>
-    const questions = [
-        { q: "១. តើ pH របស់សូលុយស្យុងអាស៊ីតខ្លាំងដែលមានកំហាប់ 0.01M ស្មើនឹងប៉ុន្មាន?", options: ["1", "2", "3", "7"], correct: 1 },
-        { q: "២. តើប្រតិកម្មរវាងអាស៊ីតខ្លាញ់ និងគ្លីសេរ៉ុល បង្កើតបានជាអ្វី?", options: ["អាល់កុល", "អេស្ទែ", "អាល់ដេអ៊ីត", "សាប៊ូ"], correct: 1 },
-        { q: "៣. តើកាតាលីករមានតួនាទីអ្វីក្នុងប្រតិកម្មគីមី?", options: ["បន្ថយល្បឿន", "បង្កើនល្បឿន", "មិនធ្វើអ្វីសោះ", "ប្តូរតុល្យភាព"], correct: 1 },
-        { q: "៤. រូបមន្តទូទៅរបស់អាស៊ីតកាបុកស៊ីលីកគឺ៖", options: ["R-OH", "R-CHO", "R-COOH", "R-NH2"], correct: 2 },
-        { q: "៥. ប្រតិកម្មសាប៊ូកម្ម (Saponification) គឺជាប្រតិកម្មរវាងអេស្ទែជាមួយអ្វី?", options: ["ទឹក", "អាស៊ីត", "បាសខ្លាំង", "អាល់កុល"], correct: 2 },
-        { q: "៦. ក្នុងសមីការ CnH2n+2 តើវាជារូបមន្តទូទៅរបស់អ្វី?", options: ["អាល់សែន", "អាល់ស៊ីន", "អាល់កាន", "អាល់កុល"], correct: 2 },
-        { q: "៧. តើ pH របស់ទឹកសុទ្ធនៅសីតុណ្ហភាព 25°C ស្មើនឹងប៉ុន្មាន?", options: ["0", "14", "7", "1"], correct: 2 },
-        { q: "៨. សូលុយស្យុងមួយមាន [H3O+] = 10^-5 M តើ pH ស្មើនឹងប៉ុន្មាន?", options: ["3", "5", "9", "14"], correct: 1 },
-        { q: "៩. តើបាសឆ្លាស់របស់អាស៊ីត HCl គឺអ្វី?", options: ["H2O", "Cl-", "OH-", "H3O+"], correct: 1 },
-        { q: "១០. តើម៉ាសម៉ូលរបស់ NaOH ស្មើនឹងប៉ុន្មាន? (Na=23, O=16, H=1)", options: ["20 g/mol", "30 g/mol", "40 g/mol", "58 g/mol"], correct: 2 }
-    ];
-
-    let currentIdx = 0;
-    let userAnswers = new Array(questions.length).fill(null);
-
-    function displayQuestion() {
-        const q = questions[currentIdx];
-        document.getElementById('progress-text').innerText = `សំណួរទី ${currentIdx + 1} នៃ ${questions.length}`;
-        document.getElementById('q-text').innerText = q.q;
+    <script>
+        // State management
+        let students = [];
+        let editingStudentId = null;
+        const COURSES = [
+            { id: 'math', name: 'គណិតវិទ្យា', icon: 'fa-calculator' },
+            { id: 'chem', name: 'គីមីវិទ្យា', icon: 'fa-flask' },
+            { id: 'bio', name: 'ជីវៈវិទ្យា', icon: 'fa-dna' }
+        ];
         
-        const optionsHtml = q.options.map((opt, i) => `
-            <label class="${userAnswers[currentIdx] === i ? 'selected' : ''}">
-                <input type="radio" name="answer" value="${i}" ${userAnswers[currentIdx] === i ? 'checked' : ''} onchange="saveAnswer(${i})">
-                ${opt}
-            </label>
-        `).join('');
+        let actionToDelete = { type: null, id: null }; // type: 'single', 'all'
+
+        // DOM Elements
+        const form = document.getElementById('studentForm');
+        const checkboxes = document.querySelectorAll('.course-checkbox');
+        const totalAmountInput = document.getElementById('totalAmount');
+        const courseListsContainer = document.getElementById('courseListsContainer');
+        const emptyListState = document.getElementById('emptyListState');
+        const formError = document.getElementById('formError');
+        const formErrorMessage = document.getElementById('formErrorMessage');
         
-        document.getElementById('options-container').innerHTML = optionsHtml;
+        // Modals & Toasts
+        const deleteModal = document.getElementById('deleteModal');
+        const toast = document.getElementById('toast');
 
-        // ប៊ូតុងបញ្ជា
-        document.getElementById('btn-prev').disabled = currentIdx === 0;
-        if (currentIdx === questions.length - 1) {
-            document.getElementById('btn-next').innerText = "មើលលទ្ធផល";
-            document.getElementById('btn-next').className = "btn-submit";
-        } else {
-            document.getElementById('btn-next').innerText = "បន្ទាប់ / រំលង";
-            document.getElementById('btn-next').className = "btn-next";
-        }
-    }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set today's date format YYYY-MM-DD
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('regDate').value = `${yyyy}-${mm}-${dd}`;
+            
+            // Setup course checkbox listeners to enable/disable price inputs and calc total
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const courseId = e.target.dataset.courseId;
+                    const priceInput = document.getElementById(`price_${courseId}`);
+                    
+                    if (e.target.checked) {
+                        priceInput.disabled = false;
+                        priceInput.focus();
+                        if(!priceInput.value) priceInput.value = "0"; // Default value when checked
+                    } else {
+                        priceInput.disabled = true;
+                        priceInput.value = '';
+                    }
+                    calculateTotal();
+                });
+            });
 
-    function saveAnswer(index) {
-        userAnswers[currentIdx] = index;
-        displayQuestion(); // Refresh style
-    }
+            // Add listener to price inputs to calculate total on change
+            COURSES.forEach(course => {
+                const priceInput = document.getElementById(`price_${course.id}`);
+                if(priceInput) {
+                    priceInput.addEventListener('input', calculateTotal);
+                }
+            });
 
-    function changeQuestion(step) {
-        if (step === 1 && currentIdx === questions.length - 1) {
-            showResult();
-            return;
-        }
-        currentIdx += step;
-        displayQuestion();
-    }
+            document.getElementById('clearAllBtn').addEventListener('click', () => {
+                requestDelete('all');
+            });
 
-    function showResult() {
-        let totalScore = 0;
-        let correct = 0;
-        let wrong = 0;
-        let skipped = 0;
-
-        userAnswers.forEach((ans, i) => {
-            if (ans === null) {
-                skipped++;
-            } else if (ans === questions[i].correct) {
-                totalScore += 10;
-                correct++;
-            } else {
-                totalScore -= 5;
-                wrong++;
-            }
+            loadData();
+            renderLists();
         });
 
-        // បង្ហាញអេក្រង់លទ្ធផល
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = totalScore;
+        const calculateTotal = () => {
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    const courseId = cb.dataset.courseId;
+                    const priceStr = document.getElementById(`price_${courseId}`).value;
+                    const price = parseFloat(priceStr) || 0;
+                    total += price;
+                }
+            });
+            totalAmountInput.value = total > 0 ? total.toFixed(2) : '';
+        };
+
+        const formatCurrency = (amount) => parseFloat(amount).toFixed(0); // Showing whole numbers mainly as per image, but keeping logic float friendly
         
-        document.getElementById('final-stats').innerHTML = `
-            <p>✅ ឆ្លើយត្រូវ: ${correct} សំណួរ (+${correct * 10} ពិន្ទុ)</p>
-            <p>❌ ឆ្លើយខុស: ${wrong} សំណួរ (-${wrong * 5} ពិន្ទុ)</p>
-            <p>⚪ រំលង: ${skipped} សំណួរ (0 ពិន្ទុ)</p>
-            <hr>
-            <p><strong>ពិន្ទុសរុប: ${totalScore} / 100</strong></p>
-        `;
-    }
+        const getGenderTag = (gender) => {
+            if (gender === 'ប្រុស') {
+                return `<span class="bg-tagBlueBg text-tagBlueText px-2 py-0.5 rounded text-[10px] font-bold">ប្រុស</span>`;
+            } else {
+                return `<span class="bg-tagPinkBg text-tagPinkText px-2 py-0.5 rounded text-[10px] font-bold">ស្រី</span>`;
+            }
+        };
 
-    // ចាប់ផ្ដើមដំបូង
-    displayQuestion();
-</script>
+        const formatDate = (dateStr) => {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            return dateStr;
+        };
 
+        const showToast = (message, type = 'success') => {
+            const toastMsg = document.getElementById('toastMessage');
+            const iconContainer = document.getElementById('toastIconContainer');
+            const icon = document.getElementById('toastIcon');
+            
+            toastMsg.textContent = message;
+            
+            if (type === 'error') {
+                iconContainer.className = 'rounded-full p-1 bg-red-100 text-accentRed';
+                icon.className = 'fa-solid fa-xmark text-sm';
+            } else {
+                iconContainer.className = 'rounded-full p-1 bg-green-100 text-accentGreen';
+                icon.className = 'fa-solid fa-check text-sm';
+            }
+
+            toast.classList.remove('-translate-y-full', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-full', 'opacity-0');
+            }, 3000);
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            formError.classList.add('hidden');
+            
+            const name = document.getElementById('studentName').value.trim();
+            const gender = document.getElementById('gender').value;
+            const date = document.getElementById('regDate').value;
+            
+            // Collect enrolled courses and prices
+            let enrolledCourses = [];
+            let hasError = false;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    const courseId = cb.dataset.courseId;
+                    const courseName = cb.value;
+                    const priceInput = document.getElementById(`price_${courseId}`);
+                    const price = parseFloat(priceInput.value);
+                    
+                    if (isNaN(price) || price < 0) {
+                        hasError = true;
+                    } else {
+                        enrolledCourses.push({
+                            id: courseId,
+                            name: courseName,
+                            price: price
+                        });
+                    }
+                }
+            });
+
+            if (enrolledCourses.length === 0) {
+                formErrorMessage.textContent = "សូមជ្រើសរើសមុខវិជ្ជាយ៉ាងហោចណាស់មួយ។";
+                formError.classList.remove('hidden');
+                return;
+            }
+
+            if (hasError) {
+                formErrorMessage.textContent = "សូមបញ្ជាក់តម្លៃឲ្យបានត្រឹមត្រូវសម្រាប់មុខវិជ្ជាដែលបានជ្រើសរើស។";
+                formError.classList.remove('hidden');
+                return;
+            }
+
+            if (editingStudentId) {
+                const index = students.findIndex(s => s.id === editingStudentId);
+                if (index !== -1) {
+                    students[index] = {
+                        id: editingStudentId,
+                        name,
+                        gender,
+                        date,
+                        courses: enrolledCourses
+                    };
+                }
+                showToast('ទិន្នន័យត្រូវបានកែតម្រូវ');
+            } else {
+                const newStudent = {
+                    id: Date.now().toString(),
+                    name,
+                    gender,
+                    date,
+                    courses: enrolledCourses
+                };
+                students.unshift(newStudent);
+                showToast('បានបញ្ចូលទិន្នន័យសិស្សថ្មី');
+            }
+
+            saveData();
+            renderLists();
+            resetForm();
+        });
+
+        window.resetForm = () => {
+            editingStudentId = null;
+            form.reset();
+            
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('regDate').value = `${yyyy}-${mm}-${dd}`;
+            
+            COURSES.forEach(c => {
+                const pInput = document.getElementById(`price_${c.id}`);
+                if(pInput) {
+                    pInput.disabled = true;
+                    pInput.value = '';
+                }
+            });
+            totalAmountInput.value = '';
+            
+            document.getElementById('submitBtnText').textContent = 'រក្សាទុកព័ត៌មាន';
+            document.getElementById('submitBtnIcon').className = 'fa-solid fa-floppy-disk';
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+            
+            formError.classList.add('hidden');
+            document.getElementById('studentName').focus();
+        };
+
+        window.editStudent = (id) => {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            editingStudentId = id;
+            document.getElementById('studentName').value = student.name;
+            document.getElementById('gender').value = student.gender;
+            document.getElementById('regDate').value = student.date;
+
+            checkboxes.forEach(cb => {
+                cb.checked = false;
+                const priceInput = document.getElementById(`price_${cb.dataset.courseId}`);
+                priceInput.disabled = true;
+                priceInput.value = '';
+            });
+
+            student.courses.forEach(c => {
+                const cb = document.querySelector(`.course-checkbox[data-course-id="${c.id}"]`);
+                if (cb) {
+                    cb.checked = true;
+                    const priceInput = document.getElementById(`price_${c.id}`);
+                    priceInput.disabled = false;
+                    priceInput.value = c.price;
+                }
+            });
+
+            calculateTotal();
+
+            document.getElementById('submitBtnText').textContent = 'កែតម្រូវព័ត៌មាន';
+            document.getElementById('submitBtnIcon').className = 'fa-solid fa-pen-to-square';
+            document.getElementById('cancelEditBtn').classList.remove('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        const renderLists = () => {
+            courseListsContainer.innerHTML = '';
+            
+            let globalTotalRevenue = 0;
+            // Create a Set of unique student IDs across all courses
+            let uniqueStudentIds = new Set();
+            
+            let hasAnyData = false;
+
+            COURSES.forEach(courseDef => {
+                // Find all students enrolled in this course
+                let studentsInCourse = students.filter(s => s.courses.some(c => c.id === courseDef.id));
+                
+                // Sort students by date (oldest to newest) - រៀបពីមុនមកក្រោយ
+                studentsInCourse.sort((a, b) => {
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    if (dateA < dateB) return -1;
+                    if (dateA > dateB) return 1;
+                    return parseInt(a.id) - parseInt(b.id);
+                });
+
+                if (studentsInCourse.length > 0) {
+                    hasAnyData = true;
+                    
+                    let courseRevenue = 0;
+                    let tableRowsHtml = '';
+                    
+                    studentsInCourse.forEach((student, index) => {
+                        uniqueStudentIds.add(student.id);
+                        // Find the specific course detail for this student
+                        const courseDetail = student.courses.find(c => c.id === courseDef.id);
+                        courseRevenue += courseDetail.price;
+                        globalTotalRevenue += courseDetail.price;
+
+                        tableRowsHtml += `
+                            <div class="grid grid-cols-12 gap-1 items-center py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors px-1 rounded-lg group">
+                                <div class="col-span-1 text-textGray text-xs text-center">${index + 1}</div>
+                                <div class="col-span-3 font-bold text-textDark text-sm truncate" title="${student.name}">${student.name}</div>
+                                <div class="col-span-1 text-center">${getGenderTag(student.gender)}</div>
+                                <div class="col-span-3 text-textGray text-[11px] text-center" title="ថ្ងៃខែចុះឈ្មោះ">${formatDate(student.date)}</div>
+                                <div class="col-span-2 font-bold text-accentGreen text-sm text-right">$${formatCurrency(courseDetail.price)}</div>
+                                <div class="col-span-2 flex justify-end gap-1 pr-1">
+                                    <button onclick="editStudent('${student.id}')" class="w-6 h-6 rounded bg-blue-50 text-primaryBlue hover:bg-primaryBlue hover:text-white transition-colors flex items-center justify-center shadow-sm" title="កែតម្រូវ">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button onclick="requestDelete('single', '${student.id}', '${courseDef.name}')" class="w-6 h-6 rounded bg-red-50 text-accentRed hover:bg-accentRed hover:text-white transition-colors flex items-center justify-center shadow-sm" title="លុបសិស្សនេះ">
+                                        <i class="fa-solid fa-trash-can text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // Build course card
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'bg-inputBg rounded-2xl p-4 border border-borderLight shadow-sm relative overflow-hidden';
+                    courseCard.innerHTML = `
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-primaryPurple"></div>
+                        
+                        <div class="flex items-center gap-3 mb-4 pl-2">
+                            <div class="bg-white border border-borderLight text-primaryPurple p-2 rounded-lg shadow-sm">
+                                <i class="fa-solid ${courseDef.icon}"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-primaryPurple">ថ្នាក់ / វគ្គ៖ ${courseDef.name}</h3>
+                        </div>
+                        
+                        <div class="flex gap-2 mb-4 pl-2">
+                            <span class="bg-green-50 text-accentGreen border border-green-200 px-3 py-1 rounded-full text-sm font-bold shadow-sm">
+                                សរុប៖ $${formatCurrency(courseRevenue)}
+                            </span>
+                            <span class="bg-primaryBlue text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm shadow-blue-200">
+                                ${studentsInCourse.length} នាក់
+                            </span>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-inner-soft">
+                            <!-- Table Header -->
+                            <div class="grid grid-cols-12 gap-1 py-3 px-1 border-b border-gray-100 text-[11px] font-bold text-textGray">
+                                <div class="col-span-1 text-center">ល.រ</div>
+                                <div class="col-span-3">ឈ្មោះសិស្ស</div>
+                                <div class="col-span-1 text-center">ភេទ</div>
+                                <div class="col-span-3 text-center">ថ្ងៃខែ</div>
+                                <div class="col-span-2 text-right">តម្លៃ</div>
+                                <div class="col-span-2 text-center">សកម្មភាព</div>
+                            </div>
+                            <!-- Table Body -->
+                            <div class="px-1 py-1">
+                                ${tableRowsHtml}
+                            </div>
+                        </div>
+                    `;
+                    courseListsContainer.appendChild(courseCard);
+                }
+            });
+
+            // Update Global Summaries
+            document.getElementById('globalTotalRevenue').textContent = `$ ${parseFloat(globalTotalRevenue).toFixed(2)}`;
+            document.getElementById('globalTotalStudents').textContent = `${uniqueStudentIds.size} នាក់`;
+
+            // Toggle Empty State
+            if (hasAnyData) {
+                emptyListState.classList.add('hidden');
+                document.getElementById('clearAllBtn').classList.remove('hidden');
+            } else {
+                emptyListState.classList.remove('hidden');
+                document.getElementById('clearAllBtn').classList.add('hidden');
+            }
+        };
+
+        window.requestDelete = (type, id = null, contextName = '') => {
+            actionToDelete = { type, id };
+            const msgEl = document.getElementById('deleteModalMsg');
+            
+            if (type === 'all') {
+                msgEl.textContent = 'តើអ្នកពិតជាចង់លុបទិន្នន័យសិស្សទាំងអស់មែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។';
+            } else {
+                msgEl.textContent = `តើអ្នកពិតជាចង់លុបទិន្នន័យសិស្សនេះមែនទេ? (លុបចេញពីគ្រប់មុខវិជ្ជា)`;
+            }
+
+            deleteModal.classList.remove('hidden');
+            setTimeout(() => {
+                deleteModal.classList.remove('opacity-0');
+                deleteModal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        };
+
+        document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+            deleteModal.classList.add('opacity-0');
+            deleteModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+                actionToDelete = { type: null, id: null };
+            }, 300);
+        });
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            if (actionToDelete.type === 'all') {
+                students = [];
+                showToast('ទិន្នន័យទាំងអស់ត្រូវបានលុប');
+            } else if (actionToDelete.type === 'single' && actionToDelete.id) {
+                // Delete the student completely from the system
+                students = students.filter(s => s.id !== actionToDelete.id);
+                showToast('ទិន្នន័យត្រូវបានលុប');
+            }
+            
+            saveData();
+            renderLists();
+            
+            // Close modal
+            document.getElementById('cancelDeleteBtn').click();
+        });
+
+        const saveData = () => {
+            localStorage.setItem('studentPaymentsDataV2', JSON.stringify(students));
+        };
+
+        const loadData = () => {
+            const stored = localStorage.getItem('studentPaymentsDataV2');
+            if (stored) {
+                try {
+                    students = JSON.parse(stored);
+                } catch (e) {
+                    console.error("Error parsing stored data", e);
+                    students = [];
+                }
+            }
+        };
+
+    </script>
 </body>
 </html>
